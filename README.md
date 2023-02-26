@@ -7,5 +7,6 @@ Dummy data: "dummydata.csv" in the Data folder of GLACE.
 3) The code generates an error when trying to calculate the energy, more specifically when trying to use the method tf.gather().
 
 
-Note: the dummy data currently has "labels" as a variable, this is temporary and should be changed to house prices. It was to check whether the generated error was caused by this.
-The error doesn't manifest when running "cora_ml_train.npz".
+Note: 
+- The dummy data currently has "labels" as a variable, this is temporary and should be changed to house prices. It was to check whether the generated error was caused by this. The error doesn't manifest when running "cora_ml_train.npz".
+- The file "content.py" can be used to check the contents of the npz files. Currently the cora_ml_train and your_graph_train have the same format.
