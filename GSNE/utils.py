@@ -35,6 +35,9 @@ class DataUtils:
 
         with np.load(graph_file, allow_pickle=True) as loader:
             loader = dict(loader)
+            import os
+            print(os.getcwd())
+
             #Creates the adjacency matrix.
             self.A = sp.csr_matrix((loader['adj_data'], loader['adj_indices'],
                                loader['adj_indptr']), shape=loader['adj_shape'])

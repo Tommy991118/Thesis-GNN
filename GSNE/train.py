@@ -169,16 +169,20 @@ def train(args):
     graph_file3 = 'Data Tables Step 7 - Processed npzs_cleaned/graph_3_property_school.npz'
     graph_file4 = 'Data Tables Step 7 - Processed npzs_cleaned/graph_4_school_train.npz'
     graph_file5 = 'Data Tables Step 7 - Processed npzs_cleaned/gra ph_5_train_train.npz' """
+    import os
+    os.chdir("C:/Users/nino/Desktop/Python/ThesisFinal/GSNE")
 
     graph_file = 'Data.npz'
-    graph_file1 = 'graph1.npz'
-    graph_file2 = 'graph2.npz'
-    graph_file3 = 'graph3.npz'
-    graph_file4 = 'graph4.npz'
-    graph_file5 = 'graph5.npz'
+    graph_file1 = 'FINALEDUMMYDATASET1.npz'
+    graph_file2 = 'FINALEDUMMYDATASET2.npz'
+    graph_file3 = 'FINALEDUMMYDATASET3.npz'
+    graph_file4 = 'FINALEDUMMYDATASET4.npz'
+    graph_file5 = 'FINALEDUMMYDATASET5.npz'
 
     #Dataset splitting for ensuring inductivity 
+
     price_file = 'Property_price.csv'
+    #The price file contains an id variable and price variable
     df_price = pd.read_csv(price_file, delimiter=";")
     train, tesst = train_test_split_sampled(df_price, 'price', 2)
 
@@ -186,7 +190,7 @@ def train(args):
     test_indices = tesst[:, 0]
     np.savetxt("train.txt", train_indices)
     np.savetxt("test.txt", test_indices)
-
+ 
     #Normal attribute and graph loaders, added with test indices for ensuring they don't get trained
     data_loader = DataUtils(graph_file, args.is_all, test_indices=test_indices) #THIS ONLY CONTAINS ATTRIBUTE INFO
     data_loader1 = DataUtils(graph_file1, args.is_all, data_loader.node_negative_distribution_temp,test_indices=test_indices)
@@ -194,8 +198,6 @@ def train(args):
     data_loader3 = DataUtils(graph_file3, args.is_all, data_loader.node_negative_distribution_temp,test_indices=test_indices)
     data_loader4 = DataUtils(graph_file4, args.is_all, data_loader.node_negative_distribution_temp,test_indices=test_indices)
     data_loader5 = DataUtils(graph_file5, args.is_all, data_loader.node_negative_distribution_temp,test_indices=test_indices)
-
-
 
     #If attribute data isn't given then the code below won't work, is it then okay to comment it out? 
     suffix = args.proximity
