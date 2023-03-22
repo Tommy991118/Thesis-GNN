@@ -6,7 +6,6 @@ import pickle
 import time
 import scipy.sparse as sp
 
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--name', default='cora_ml')
@@ -24,7 +23,10 @@ def main():
     train(args)
 
 def train(args):
-    graph_file = 'data/%s/%s.npz' % (args.name, args.name)
+    import os
+    print(os.getcwd())
+    graph_file = 'GLACE/data/cora_ml/FINALEDUMMYDATASET.npz'
+    #graph_file = 'data/%s/%s.npz' % (args.name, args.name)
     graph_file = graph_file.replace('.npz', '_train.npz') if not args.is_all else graph_file
     data_loader = DataUtils(graph_file, args.is_all)
 
@@ -65,6 +67,7 @@ def train(args):
             if model.val_set:
                 if b % 50 == 0:
                     val_energy = sess.run(model.neg_val_energy)
+                    print(val_energy)
                     val_auc, val_ap = score_link_prediction(data_loader.val_ground_truth, val_energy)
                     print('%d\t%f\t%f\t%f\t%0.2f\t%0.2f\t%s' % (b, loss, val_auc, val_ap, sampling_time, training_time,
                                                                     time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
@@ -74,7 +77,7 @@ def train(args):
                     print('%d\t%f\t%0.2f\t%0.2f\t%s' % (b, loss, sampling_time, training_time,
                                                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
                     sampling_time, training_time = 0, 0
-
+            os.chdir("C:/Users/nino/Desktop/Python/GLACE")
             if b % 50 == 0 or b == (args.num_batches - 1):
                 if m == 'glace':
                     mu, sigma = sess.run([model.embedding, model.sigma])
