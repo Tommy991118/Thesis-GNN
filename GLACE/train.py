@@ -17,14 +17,14 @@ def main():
     parser.add_argument('--batch_size', type=int, default=128)
     parser.add_argument('--K', type=int, default=5)
     parser.add_argument('--learning_rate', default=0.001)
-    parser.add_argument('--num_batches', type=int, default=100000)
+    parser.add_argument('--num_batches', type=int, default=3000)
     parser.add_argument('--is_all', default=False)  # train with all edges; no validation or test set
     args = parser.parse_args()
     args.is_all = True if args.is_all == 'True' else False
     train(args)
-
+# Ik heb de graph_file path verandert
 def train(args):
-    graph_file = 'data/%s/%s.npz' % (args.name, args.name)
+    graph_file = 'data/%s/Full_graph.npz' % (args.name)
     graph_file = graph_file.replace('.npz', '_train.npz') if not args.is_all else graph_file
     data_loader = DataUtils(graph_file, args.is_all)
 
@@ -76,6 +76,7 @@ def train(args):
                     sampling_time, training_time = 0, 0
 
             if b % 50 == 0 or b == (args.num_batches - 1):
+                # Ik heb bij open "GLACE" toegevoegd voor de path.
                 if m == 'glace':
                     mu, sigma = sess.run([model.embedding, model.sigma])
                     pickle.dump({'mu': data_loader.embedding_mapping(mu),
