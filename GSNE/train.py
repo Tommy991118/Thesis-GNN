@@ -168,19 +168,15 @@ def train(args):
     graph_file2 = 'Data Tables Step 7 - Processed npzs_cleaned/graph_2_house_train.npz'
     graph_file3 = 'Data Tables Step 7 - Processed npzs_cleaned/graph_3_property_school.npz'
     graph_file4 = 'Data Tables Step 7 - Processed npzs_cleaned/graph_4_school_train.npz'
-    graph_file5 = 'Data Tables Step 7 - Processed npzs_cleaned/gra ph_5_train_train.npz' """
+    graph_file5 = 'Data Tables Step 7 - Processed npzs_cleaned/graph_5_train_train.npz' """
     import os
     os.chdir("C:/Users/nino/Desktop/Python/ThesisFinal/GSNE")
 
-    graph_file = 'Data.npz'
-    graph_file1 = 'FINALEDUMMYDATASET1.npz'
-    graph_file2 = 'FINALEDUMMYDATASET2.npz'
-    graph_file3 = 'FINALEDUMMYDATASET3.npz'
-    graph_file4 = 'FINALEDUMMYDATASET4.npz'
-    graph_file5 = 'FINALEDUMMYDATASET5.npz'
+    graph_file = 'Data.npz' #General graph file
+    graph_file1 = 'FINALEDUMMYDATASET1.npz' #graph file house-house
+    graph_file2 = 'FINALEDUMMYDATASET2.npz' #graph file house-school
 
     #Dataset splitting for ensuring inductivity 
-
     price_file = 'Property_price.csv'
     #The price file contains an id variable and price variable
     df_price = pd.read_csv(price_file, delimiter=";")
@@ -195,16 +191,11 @@ def train(args):
     data_loader = DataUtils(graph_file, args.is_all, test_indices=test_indices) #THIS ONLY CONTAINS ATTRIBUTE INFO
     data_loader1 = DataUtils(graph_file1, args.is_all, data_loader.node_negative_distribution_temp,test_indices=test_indices)
     data_loader2 = DataUtils(graph_file2, args.is_all, data_loader.node_negative_distribution_temp,test_indices=test_indices)
-    data_loader3 = DataUtils(graph_file3, args.is_all, data_loader.node_negative_distribution_temp,test_indices=test_indices)
-    data_loader4 = DataUtils(graph_file4, args.is_all, data_loader.node_negative_distribution_temp,test_indices=test_indices)
-    data_loader5 = DataUtils(graph_file5, args.is_all, data_loader.node_negative_distribution_temp,test_indices=test_indices)
 
     #If attribute data isn't given then the code below won't work, is it then okay to comment it out? 
     suffix = args.proximity
     args.X1 = data_loader.X1 if args.suf != 'oh' else sp.identity(data_loader1.X1.shape[0])
     args.X2 = data_loader.X2 if args.suf != 'oh' else sp.identity(data_loader2.X2.shape[0])
-    args.X3 = data_loader.X3 if args.suf != 'oh' else sp.identity(data_loader3.X3.shape[0])
-    args.X4 = data_loader.X4 if args.suf != 'oh' else sp.identity(data_loader4.X4.shape[0])
     
     m = args.model
     name = m + '_' + args.name
@@ -233,17 +224,11 @@ def train(args):
               clear_output()
             t1 = time.time()
             #CREATE DIFFERENT SAMPLER
-            if b%5 < 0:
+            if b%2 == 0:
                 #sess.run(model.zero_ops)
                 u_i, u_j, label, node_type1, node_type2 = data_loader1.fetch_next_batch(batch_size=args.batch_size, K=args.K)
-            elif b%5 < 0:
-                u_i, u_j, label, node_type1, node_type2 = data_loader2.fetch_next_batch(batch_size=args.batch_size, K=args.K)
-            elif b%5 >= 0:
-                u_i, u_j, label, node_type1, node_type2 = data_loader3.fetch_next_batch(batch_size=args.batch_size, K=args.K)
-            elif b%5 == 3:
-                u_i, u_j, label, node_type1, node_type2 = data_loader4.fetch_next_batch(batch_size=args.batch_size, K=args.K)
             else:
-                u_i, u_j, label, node_type1, node_type2 = data_loader5.fetch_next_batch(batch_size=args.batch_size, K=args.K)
+                u_i, u_j, label, node_type1, node_type2 = data_loader2.fetch_next_batch(batch_size=args.batch_size, K=args.K)
             
             #u_i, u_j, label, w = data_loader.fetch_next_batch(batch_size=args.batch_size, K=args.K)
             feed_dict = {model.u_i: u_i, model.u_j: u_j, model.label: label, model.node_type1 : node_type1, model.node_type2 : node_type2}
@@ -262,7 +247,6 @@ def train(args):
               writer.add_summary(s, b)
               writer.flush()
 
-
             if b % 5000 < 5:
                 print('%d\t%f\t%0.2f\t%0.2f\t%s' % (b, loss, sampling_time, training_time,
                                                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
@@ -274,20 +258,16 @@ def train(args):
                     
                     mu1, sigma1 = sess.run([model.embedding1, model.sigma1])
                     mu2, sigma2 = sess.run([model.embedding2, model.sigma2])
-                    mu3, sigma3 = sess.run([model.embedding3, model.sigma3])
-                    mu4, sigma4 = sess.run([model.embedding4, model.sigma4])
 
                     mu = copy.deepcopy(mu1)
                     mu[node1_start: node1_end] = mu1[node1_start: node1_end]
                     mu[node2_start: node2_end] = mu2[node2_start: node2_end]
-                    mu[node3_start: node3_end] = mu3[node3_start: node3_end]
-                    mu[node4_start: node4_end] = mu4[node4_start: node4_end]
+
 
                     sigma = copy.deepcopy(sigma1)
                     sigma[node1_start: node1_end] = sigma1[node1_start: node1_end]
                     sigma[node2_start: node2_end] = sigma2[node2_start: node2_end]
-                    sigma[node3_start: node3_end] = sigma3[node3_start: node3_end]
-                    sigma[node4_start: node4_end] = sigma4[node4_start: node4_end]
+
                     
                     #The code below stores the file object as a pickle.
                     #It is then opened in a wb (write-binary) mode.
@@ -307,7 +287,6 @@ def train(args):
                                  'sigma': data_loader.embedding_mapping(sigma)},
                                 open('C:/Users/nino/Desktop/Python/GSNE/Embeddings/' + '%s%s_embedding_graduate_%s_best.pkl' % (name, '_all' if args.is_all else '', suffix), 'wb'))
                       save_path = saver.save(sess, model_path + "model_graduate_best.ckpt")
-
                 else:
                     raise Exception("only GSNE supported")
 
