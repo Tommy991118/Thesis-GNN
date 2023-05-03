@@ -12,7 +12,9 @@ Tensorflow 1.15.0
 
 Scipy 1.5.4 
 ```
+
 # Process of using network embeddings for house price predictions 
+
 ![Visual representation of using network embeddings for house price predictions](Figures/Overview_process.png)
 
 1) "DataPipeline.ipynb" represents the data pipeline of transforming tabular data to graph files. The current pipeline is compatible with GLACE and GSNE, minor adjustments are necessary based on the used datasets. The notebook used the open-source datasets of King county: "kc_school_data.csv" and "kc_house_data.csv". The data itself only has as requirement that it contains variables regarding its location coordinates. 
