@@ -3,11 +3,15 @@
 ![Visual representation of using network embeddings for house price predictions](Figures/Overview_process.png)
 
 ### Requirements
-`python
+`
 Python version 3.6.13
+
 Networkx version 2.5.1
+
 Scikit-learn 0.24.2
+
 Tensorflow 1.15.0
+
 Scipy 1.5.4 
 `
 
