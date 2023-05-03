@@ -3,7 +3,7 @@
 ![Visual representation of using network embeddings for house price predictions](Figures/Overview_process.png)
 
 ### Requirements
-`
+`python
 Python version 3.6.13
 
 Networkx version 2.5.1
