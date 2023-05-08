@@ -2,15 +2,21 @@
 
 # Requirements
 ```
-Python version 3.6.13
+Python 3.6.13
 
-Networkx version 2.5.1
+Networkx 2.5.1
 
 Scikit-learn 0.24.2
 
 Tensorflow 1.15.0
 
-Scipy 1.5.4 
+Scipy 1.5.4
+
+Matplotlib 3.1.3
+
+NumPy 1.21.5
+
+Pandas 1.3.5
 ```
 
 # Process of using network embeddings for house price predictions 
