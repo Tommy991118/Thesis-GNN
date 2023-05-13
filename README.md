@@ -1,4 +1,6 @@
-# Network Embeddings for House Price Predictions
+# Predicting house prices using geospatial network embeddings incorporating POIs
+This Github repository outlines our conducted research on improving the predictive performance of house price predictions by utilizing Gaussian network embeddings. The repository contains code ranging from data preparation to model evaluation. The [GSNE](https://arxiv.org/pdf/2009.00254.pdf) and [GLACE]([https://arxiv.org/pdf/2009.00254.pdf](https://arxiv.org/pdf/1912.00536.pdf))
+models were utilized to create the Gaussian network embeddings. Some adjustments have been made to these models to make them compatible with the King County datasets. We also decided to separate the Jupyter notebook encompassing the data preprocessing pipeline and the house price prediction models. This choice was made to facilitate future researchers in a user-friendly way to make adjustments to the different processes. 
 
 # Requirements
 ```
@@ -23,7 +25,8 @@ Pandas 1.3.5
 
 ![Visual representation of using network embeddings for house price predictions](Figures/Overview_process.png)
 
-1) "DataPipeline.ipynb" represents the data pipeline of transforming tabular data to graph files. The current pipeline is compatible with GLACE and GSNE, minor adjustments are necessary based on the used datasets. The notebook used the open-source datasets of King county: "kc_school_data.csv" and "kc_house_data.csv". The data itself only has as requirement that it contains variables regarding its location coordinates. 
+## **1. Data Preprocessing Pipeline** 
+The Jupyter notebook "DataPipeline.ipynb" represents the data pipeline of transforming tabular data to graph files. The current pipeline is compatible with GLACE and GSNE_adjusted models. The notebook utilized open-source datasets of King county: "kc_school_data.csv" and "kc_house_data.csv", respresenting respectively data on schools and houses in King County. The input data only has as requirement that it must contain variables concerning its geographical coordinates (latitude and longitude) for the house or point of interest (POI). 
 
 <p align="center">
   <img src="Figures/Overview_GraphFiles.png" alt="Visual representation of the data pipeline" />
