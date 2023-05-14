@@ -1,0 +1,7 @@
+dataset,metric,test or train,model,value
+H-S emb + Raw (with lat & long),MAPE,Test,LinReg,"0,1799"
+H-S emb + Raw (with lat & long),MAPE,Test,XGB,"0,1157"
+H-S emb + Raw (with lat & long),MAPE,Test,RandomForest,"0,1273"
+Raw Base (with lat & long),MAPE,Test,LinReg,"0,2009"
+Raw Base (with lat & long),MAPE,Test,XGB,"0,1185"
+Raw Base (with lat & long),MAPE,Test,RandomForest,"0,1320"
