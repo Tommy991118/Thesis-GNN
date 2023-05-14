@@ -26,7 +26,7 @@ class DataUtils:
                 self.test_edges = loader['test_edges']
                 self.test_ground_truth = loader['test_ground_truth']
 
-            self.g = nx.from_scipy_sparse_matrix(self.A)
+            self.g = nx.from_scipy_sparse_matrix(self.A, edge_attribute = 'weight')
 
             self.num_of_nodes = self.g.number_of_nodes()
             self.num_of_edges = self.g.number_of_edges()

@@ -6,6 +6,7 @@ import pickle
 import time
 import scipy.sparse as sp
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--name', default='cora_ml')
@@ -15,18 +16,15 @@ def main():
     parser.add_argument('--embedding_dim', type=int, default=64)
     parser.add_argument('--batch_size', type=int, default=128)
     parser.add_argument('--K', type=int, default=5)
-    parser.add_argument('--learning_rate', default=0.001)
-    parser.add_argument('--num_batches', type=int, default=100000)
+    parser.add_argument('--learning_rate', default=0.005)
+    parser.add_argument('--num_batches', type=int, default=40000)
     parser.add_argument('--is_all', default=False)  # train with all edges; no validation or test set
     args = parser.parse_args()
     args.is_all = True if args.is_all == 'True' else False
     train(args)
-
+# Change graph file path
 def train(args):
-    import os
-    print(os.getcwd())
-    graph_file = 'GLACE/data/cora_ml/FINALEDUMMYDATASET.npz'
-    #graph_file = 'data/%s/%s.npz' % (args.name, args.name)
+    graph_file = 'data/%s/Final_graph_house_house.npz' % (args.name)
     graph_file = graph_file.replace('.npz', '_train.npz') if not args.is_all else graph_file
     data_loader = DataUtils(graph_file, args.is_all)
 
@@ -44,6 +42,7 @@ def train(args):
         model = GLACE(args)
 
     with tf.Session() as sess:
+        print(graph_file)
         print('-------------------------- ' + m + ' --------------------------')
         if model.val_set:
             print('batches\tloss\tval_auc\tval_ap\tsampling time\ttraining_time\tdatetime')
@@ -67,7 +66,6 @@ def train(args):
             if model.val_set:
                 if b % 50 == 0:
                     val_energy = sess.run(model.neg_val_energy)
-                    print(val_energy)
                     val_auc, val_ap = score_link_prediction(data_loader.val_ground_truth, val_energy)
                     print('%d\t%f\t%f\t%f\t%0.2f\t%0.2f\t%s' % (b, loss, val_auc, val_ap, sampling_time, training_time,
                                                                     time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
@@ -77,20 +75,20 @@ def train(args):
                     print('%d\t%f\t%0.2f\t%0.2f\t%s' % (b, loss, sampling_time, training_time,
                                                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
                     sampling_time, training_time = 0, 0
-            os.chdir("C:/Users/nino/Desktop/Python/GLACE")
+
             if b % 50 == 0 or b == (args.num_batches - 1):
                 if m == 'glace':
                     mu, sigma = sess.run([model.embedding, model.sigma])
                     pickle.dump({'mu': data_loader.embedding_mapping(mu),
                                  'sigma': data_loader.embedding_mapping(sigma)},
-                                open('emb/%s%s_embedding_%s.pkl' % (name, '_all' if args.is_all else '', suffix), 'wb'))
+                                open('emb/%s%s_embedding_%s_Final_graph_house_house.pkl' % (name, '_all' if args.is_all else '', suffix), 'wb'))
                     # if model.val_set:
                     #     r = kl_link_pred(mu, sigma, test_edges)
                     #     print('{:.4f}, {:.4f}'.format(r[0], r[1]))
                 else:
                     embedding = sess.run(model.embedding)
                     pickle.dump(data_loader.embedding_mapping(embedding),
-                                open('emb/%s%s_embedding_%s.pkl' % (name, '_all' if args.is_all else '', suffix), 'wb'))
+                                open('emb/%s%s_embedding_%s_Final_graph_house_house.pkl' % (name, '_all' if args.is_all else '', suffix), 'wb'))
                     # if model.val_early_stopping:
                     #     r = link_prediction(test_edges, embedding)
                     #     print('{:.4f}, {:.4f}'.format(r[0], r[1]))
